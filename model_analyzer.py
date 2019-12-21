@@ -1,10 +1,11 @@
 import pickle
 from gensim.models.word2vec import Word2Vec
 import gensim.downloader as api
+import subprocess
 
-def download_word2vec_model(model, filename):
+def download_word2vec_model(model_name, filename):
     filehandler = open(filename, 'wb')
-    model = api.load(database)
+    model = api.load(model_name)
     pickle.dump(model, filehandler)
 
 def retrieve_word2vec_model(filename):
@@ -12,5 +13,23 @@ def retrieve_word2vec_model(filename):
     model = pickle.load(filehandler)
     return model
 
+#def
+
+def main():
+    p = subprocess.Popen(["java", "Wordometry"], stdin=subprocess.PIPE)
+    p.stdin.write("First line\r\n")
+    p.stdin.write("Second line\r\n")
+    p.stdin.write("x\r\n") # this line will not be printed into the file
+
+
+download_word2vec_model('glove-twitter-25', 'glove-twitter-25')
 model_glove_twitter = retrieve_word2vec_model('glove-twitter-25')
-print(model_glove_twitter.most_similar('hot',topn=15))
+
+#print(model_glove_twitter.('england', 'crumpet'))
+#print(model_glove_twitter.n_similarity(['woman', 'boy'], ['man', 'girl']))
+
+print(model_glove_twitter.most_similar_cosmul('sex',topn=15))
+#print(model_glove_twitter.most_similar(positive = ['staircase', 'ladders'],negative = ['escalators']))
+
+#print()
+
