@@ -1,5 +1,5 @@
 import pickle
-from gensim.models.word2vec import Word2Vec
+from gensim.models import Word2Vec, KeyedVectors
 import gensim.downloader as api
 import subprocess
 
@@ -22,14 +22,45 @@ def main():
     p.stdin.write("x\r\n") # this line will not be printed into the file
 
 
-download_word2vec_model('glove-twitter-25', 'glove-twitter-25')
-model_glove_twitter = retrieve_word2vec_model('glove-twitter-25')
+# download_word2vec_model('glove-twitter-25', 'glove-twitter-25')
+# model_glove_twitter = retrieve_word2vec_model('glove-twitter-25')
 
-#print(model_glove_twitter.('england', 'crumpet'))
-#print(model_glove_twitter.n_similarity(['woman', 'boy'], ['man', 'girl']))
+model_name = 'model_glove_twitter'
+# model_glove_twitter.save(model_name)
 
-print(model_glove_twitter.most_similar_cosmul('sex',topn=15))
-#print(model_glove_twitter.most_similar(positive = ['staircase', 'ladders'],negative = ['escalators']))
+model_glove_twitter = KeyedVectors.load(model_name)
 
-#print()
+
+def evaluate_analogies(model, fname, numLines=10000, top=10):
+    correct = 0
+    total = 0
+    with open(fname) as analogies:
+        for line in analogies.readlines()[:numLines]:
+            words = line.strip().lower().split()
+            if words[0] == ':':
+                continue
+
+            try:
+                for pair in model.most_similar(positive=[words[1], words[2]], negative=[words[0]], topn=top):
+                    if pair[0] == words[3]:
+                        correct += 1
+                total += 1
+            except:
+                continue
+
+    print(correct, total)
+    return correct/total
+
+# print(evaluate_analogies(model_glove_twitter, "analogies_test.txt"))
+score, d = model_glove_twitter.evaluate_word_analogies("analogies_test.txt")
+print(score)
+
+
+# print(model_glove_twitter.('england', 'crumpet'))
+# print(model_glove_twitter.n_similarity(['woman', 'boy'], ['man', 'girl']))
+
+# print(model_glove_twitter.most_similar_cosmul('sex',topn=15))
+# print(model_glove_twitter.most_similar(positive = ['staircase', 'ladders'],negative = ['escalators']))
+
+# print(model_glove_twitter.most_similar(positive = ['greece', 'baghdad'],negative = ['athens'], topn=10))
 
