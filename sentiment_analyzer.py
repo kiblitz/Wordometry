@@ -40,7 +40,7 @@ print(positive / total, subj / total)
 
 labelled_large = pd.read_csv('datasets/trainingandtestdata/training.1600000.processed.noemoticon.csv', encoding = "ISO-8859-1")
 
-SAMPLE_SIZE = 10000
+SAMPLE_SIZE = 20000
 tweets = []
 labelled_large = labelled_large.iloc[np.random.permutation(len(labelled_large))]
 labelled_large.reset_index(inplace=True, drop=True)
@@ -75,7 +75,7 @@ def preprocess(tweets):
             yield TaggedDocument(tweet, [i])
 
     tagged_tweets = list(tag_tweets(tweet_list))
-    doc2vec_model = Doc2Vec(vector_size=40, min_count=2, epochs=40)
+    doc2vec_model = Doc2Vec(vector_size=50, min_count=2, epochs=40)
     doc2vec_model.build_vocab(tagged_tweets)
     print("Passed dictionary creation...")
 
@@ -100,15 +100,15 @@ model = keras.Sequential([
     keras.layers.Dropout(0.5),
     keras.layers.Dense(512, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001)),
     keras.layers.Dropout(0.5),
-    keras.layers.Dense(2, activation='softmax')
+    keras.layers.Dense(2, activation='sigmoid')
 ])
 
-model.compile(optimizer="adam",
-              loss='sparse_categorical_crossentropy',
+model.compile(optimizer=tf.keras.optimizers.SGD(lr=0.01, momentum=0.9),
+              loss='binary_crossentropy',
               metrics=['accuracy'])
 
 # Training model on training dataset
-model.fit(train_docs, train_labels, epochs=20) # Epochs is number of times the dataset is run over
+model.fit(train_docs, train_labels, validation_split=0.25, epochs=10)
 
 # Evaluating model on testing dataset
 test_loss, test_acc = model.evaluate(test_docs, test_labels, verbose=2)
