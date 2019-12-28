@@ -22,11 +22,11 @@ def main():
     p.stdin.write("x\r\n") # this line will not be printed into the file
 
 
-# download_word2vec_model('glove-twitter-25', 'glove-twitter-25')
-# model_glove_twitter = retrieve_word2vec_model('glove-twitter-25')
+download_word2vec_model('glove-twitter-25', 'saved_models/glove-twitter-25')
+model_glove_twitter = retrieve_word2vec_model('saved_models/glove-twitter-25')
 
-model_name = 'model_glove_twitter'
-# model_glove_twitter.save(model_name)
+model_name = 'saved_models/model_glove_twitter'
+model_glove_twitter.save(model_name)
 
 model_glove_twitter = KeyedVectors.load(model_name)
 
@@ -52,7 +52,7 @@ def evaluate_analogies(model, fname, numLines=10000, top=10):
     return correct/total
 
 # print(evaluate_analogies(model_glove_twitter, "analogies_test.txt"))
-score, d = model_glove_twitter.evaluate_word_analogies("analogies_test.txt")
+score, d = model_glove_twitter.evaluate_word_analogies("datasets/analogies_test.txt")
 print(score)
 
 

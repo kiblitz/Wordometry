@@ -19,13 +19,13 @@ Stuff to add in to make better:
 """
 
 # If you can get json to work properly, then this is also a viable dataset
-# with open('24/00/55.json') as json_file:
+# with open('datasets/24/00/55.json') as json_file:
 #     data = json.load(json_file)
 #     print(data)
 #     print("hi")
 
 # 30,000 tweets from Trump from 5/4/09 - 12/5/16
-df = pd.read_csv('2016_12_05-TrumpTwitterAll.csv')
+df = pd.read_csv('datasets/2016_12_05-TrumpTwitterAll.csv')
 tweets = [tweet for tweet in df.loc[:, "Tweet"]]
 
 def preprocess_one(tweet):

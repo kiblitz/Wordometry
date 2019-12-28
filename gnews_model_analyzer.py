@@ -3,7 +3,7 @@ from gensim.models import Word2Vec, KeyedVectors
 import gensim.downloader as api
 import subprocess
 
-model_gnews = KeyedVectors.load_word2vec_format("GoogleNews-vectors-negative300.bin", binary=True, limit=200000)
+model_gnews = KeyedVectors.load_word2vec_format("saved_models/GoogleNews-vectors-negative300.bin", binary=True, limit=200000)
 print("Finished Loading")
 
 def evaluate_analogies(model, fname, numLines=10000, top=10):
@@ -26,6 +26,6 @@ def evaluate_analogies(model, fname, numLines=10000, top=10):
     print(correct, total)
     return correct/total
 
-print(evaluate_analogies(model_gnews, "analogies_test.txt"))
-score, d = model_gnews.evaluate_word_analogies("analogies_test.txt")
+print(evaluate_analogies(model_gnews, "datasets/analogies_test.txt"))
+score, d = model_gnews.evaluate_word_analogies("datasets/analogies_test.txt")
 print(score)
