@@ -92,9 +92,9 @@ def labelled(fname='datasets/trainingandtestdata/training.1600000.processed.noem
 
     labels = labelled_large.loc[:SAMPLE_SIZE, "Sentiment"].to_numpy() / 4
 
-    half = SAMPLE_SIZE // 2
-    train_docs, test_docs = corpus[:half], corpus[half:]
-    train_labels, test_labels = labels[:half], labels[half:]
+    split = int(SAMPLE_SIZE * 0.8)
+    train_docs, test_docs = corpus[:split], corpus[split:]
+    train_labels, test_labels = labels[:split], labels[split:]
 
     model = keras.Sequential([
         keras.layers.Dense(512, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001)),
